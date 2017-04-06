@@ -1,0 +1,936 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/Pomax/node-flickrapi#readme"
+
+    >flickrapi (v0.6.0)</a>
+</h1>
+<h4>A Node.js, and client-side, implementation of the Flickr API (for use with an API key, server-side oauth enabled)</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.flickrapi">module flickrapi</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.authenticate">
+            function <span class="apidocSignatureSpan">flickrapi.</span>authenticate
+            <span class="apidocSignatureSpan">(options, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.downsync">
+            function <span class="apidocSignatureSpan">flickrapi.</span>downsync
+            <span class="apidocSignatureSpan">(location, removeDeleted)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.loadLocally">
+            function <span class="apidocSignatureSpan">flickrapi.</span>loadLocally
+            <span class="apidocSignatureSpan">(location, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.tokenOnly">
+            function <span class="apidocSignatureSpan">flickrapi.</span>tokenOnly
+            <span class="apidocSignatureSpan">(options, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.upload">
+            function <span class="apidocSignatureSpan">flickrapi.</span>upload
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">flickrapi.</span>Utils</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.flickrapi.Utils">module flickrapi.Utils</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.checkRequirements">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>checkRequirements
+            <span class="apidocSignatureSpan">(method_name, required, callOptions, callback)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.encodeRFC5987ValueChars">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>encodeRFC5987ValueChars
+            <span class="apidocSignatureSpan">(str)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.formQueryString">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>formQueryString
+            <span class="apidocSignatureSpan">(queryArguments)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.generateAPIDevFunction">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>generateAPIDevFunction
+            <span class="apidocSignatureSpan">(method)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.generateAPIFunction">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>generateAPIFunction
+            <span class="apidocSignatureSpan">(method)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.generateQueryArguments">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>generateQueryArguments
+            <span class="apidocSignatureSpan">(method_name, flickrOptions, callOptions)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.handleURLRequest">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>handleURLRequest
+            <span class="apidocSignatureSpan">(verb, url, processResult, postdata)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.queryFlickr">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>queryFlickr
+            <span class="apidocSignatureSpan">(queryArguments, flickrOptions, security, processResult)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.queryFlickrAPI">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>queryFlickrAPI
+            <span class="apidocSignatureSpan">(queryArguments, flickrOptions, security, processResult)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.queryProxyEndpoint">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>queryProxyEndpoint
+            <span class="apidocSignatureSpan">(queryArguments, flickrOptions, processResult)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.Utils.upload">
+            function <span class="apidocSignatureSpan">flickrapi.Utils.</span>upload
+            <span class="apidocSignatureSpan">(uploadOptions, flickrOptions, processResult)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.flickrapi" id="apidoc.module.flickrapi">module flickrapi</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.authenticate" id="apidoc.element.flickrapi.authenticate">
+        function <span class="apidocSignatureSpan">flickrapi.</span>authenticate
+        <span class="apidocSignatureSpan">(options, next)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">authenticate = function (options, next) {
+  if(!options) {
+    process.nextTick(function(){
+      next(new Error(&#x22;Please pass an valid Flickr API key and secret to the Flickr module.\n&#x22;+
+                     &#x22;Visit http://www.flickr.com/services/apps/create/apply to get one.&#x22;));
+    });
+    return;
+  }
+
+  // out-of-browser authentication unless specified otherwise
+  if(!options.callback) { options.callback = &#x22;oob&#x22;; }
+  if(!options.requestOptions) options.requestOptions = {};
+
+  // effect authentication
+  checkToken(options, function(err, access) {
+    var APIBuilder = require(&#x22;./flickr-api-object&#x22;);
+    if(!access) {
+      requestToken(options, function(err, body) {
+        if(options.callback !== &#x22;oob&#x22;) {
+          options.processCredentials = options.processCredentials || function(data) {
+            // default function writes creds to .env
+            if(!options.silent) {
+              console.log(&#x22;Credentials object:&#x22;);
+              console.log(JSON.stringify(data,null,2));
+            }
+            var envContent = fs.readFileSync(&#x22;.env&#x22;) + &#x22;\n&#x22;;
+            Object.keys(data).forEach(function(key) {
+              envContent += &#x22;export &#x22; + key + &#x22;=&#x22; + data[key] + &#x22;\n&#x22;;
+            });
+            fs.writeFileSync(&#x22;.env&#x22;, envContent);
+          };
+          options.processCredentials(body);
+        }
+
+        // is this auth only, or also API object creation?
+        if(options.noAPI) {
+          process.nextTick(function() { next(false); });
+        }
+        else { new APIBuilder(options, Utils, next); }
+      });
+    } else { new APIBuilder(options, Utils, next); }
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+```
+var Flickr = require(&#x22;flickrapi&#x22;),
+    flickrOptions = {
+      api_key: &#x22;API key that you get from Flickr&#x22;,
+      secret: &#x22;API key secret that you get from Flickr&#x22;
+    };
+
+Flickr.<span class="apidocCodeKeywordSpan">authenticate</span>(flickrOptions, function(error, flickr) {
+  // we can now use &#x22;flickr&#x22; as our API object
+});
+```
+
+### As flickrapi internally uses the request module, you can also pass default options for request that are accepted by request.
+defaults() as documented in the [request module](https://github.com/request/request#requestdefaultsoptions)
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.downsync" id="apidoc.element.flickrapi.downsync">
+        function <span class="apidocSignatureSpan">flickrapi.</span>downsync
+        <span class="apidocSignatureSpan">(location, removeDeleted)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">downsync = function (location, removeDeleted) {
+  &#x22;use strict&#x22;;
+
+  location = location || &#x22;./data&#x22;;
+  removeDeleted = removeDeleted || false;
+
+  var fs = require(&#x22;fs&#x22;),
+      aggregatePhotos = require(&#x22;./photos&#x22;);
+
+  // directory structure
+  var data = require(&#x22;../ia&#x22;)(location);
+
+  // process calls
+  var photos = require(&#x22;./photos&#x22;);
+  var sets = require(&#x22;./sets&#x22;);
+  var collections = require(&#x22;./collections&#x22;);
+
+  // Kick off the down-syncing process
+  return function(err, flickr) {
+    if(err) { return console.log(err); }
+
+    flickr.options.locals = data;
+
+    var completed = function() {
+      console.log(&#x22;Finished downsyncing.&#x22;);
+      var handler = flickr.options.afterDownsync;
+      if (handler) { handler(); }
+      else { process.exit(0); }
+    };
+
+    console.log();
+    collections(flickr, function() {
+      sets(flickr, function() {
+        photos(flickr, completed);
+      });
+    });
+  };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+## Download data from Flickr
+
+You can use this module to very easily download all your Flickr content, using the built in `downsync` function:
+
+```
+var Flickr = require(&#x22;flickrapi&#x22;),
+    flickrOptions = { ... };
+Flickr.authenticate(flickrOptions, flickrapi.<span class="apidocCodeKeywordSpan">downsync</span>());
+```
+
+That&#x27;s all you need to run. The package will generate a data directory with your images in `./data/images` (in several sizes
+), and the information architecture (metadata, sets, collections, etc) in `./data/ia`.
+
+If you want this in a different directory, you can pass the dir as an argument to the downsync function:
+
+```
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.loadLocally" id="apidoc.element.flickrapi.loadLocally">
+        function <span class="apidocSignatureSpan">flickrapi.</span>loadLocally
+        <span class="apidocSignatureSpan">(location, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">loadLocally = function (location, options) {
+  options = options || {};
+  var dirstructure = ensureDirectories(location);
+
+  // photos are ranked by publication date
+  var photos = readAll(dirstructure.ia.photos.root, &#x22;id&#x22;, function(a,b,items) {
+    return items[b].dates.posted - items[a].dates.posted;
+  });
+
+  // sets are ranked by creation date
+  var photosets = readAll(dirstructure.ia.photosets, &#x22;id&#x22;, function(a,b,items) {
+    return items[b].date_create - items[a].date_create;
+  });
+
+  // collections are sorted alphabetically
+  var collections = readAll(dirstructure.ia.collections, &#x22;id&#x22;, function(a,b,items) {
+    a = items[a].title;
+    b = items[b].title;
+    return a === b ? 0 : b &#x3c; a ? -1 : -1;
+  });
+
+  // filter out the private photos from the key index
+  if(!options.loadPrivate) {
+    photos.keys = photos.keys.filter(function(key) {
+      return photos.data[key].visibility.ispublic === 1;
+    });
+    photosets.keys = photosets.keys.filter(function(key) {
+      return photosets.data[key].visibility_can_see_set === 1;
+    });
+  }
+
+  // perform cross-referencing
+  crossReference(dirstructure, photos, photosets, collections);
+
+  // our final IA object
+  return {
+    // photos
+    photos: photos.data,
+    photo_keys: photos.keys,
+    // sets
+    photosets: photosets.data,
+    photoset_keys: photosets.keys,
+    // collections
+    collections: collections.data,
+    collection_keys: collections.keys,
+    // dir adminstration
+    dirstructure: dirstructure
+  };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+## Use your Flickr data in another application
+
+If you downloaded all your Flickr data, you can use these in your own node apps by &#x22;dry loading&#x22; Flickr:
+
+```
+var Flickr = require(&#x22;flickrapi&#x22;),
+  flickrData = Flickr.<span class="apidocCodeKeywordSpan">loadLocally</span>();
+```
+
+This will give you an object with the following structure:
+
+```
+{
+photos: [photo objects],
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.tokenOnly" id="apidoc.element.flickrapi.tokenOnly">
+        function <span class="apidocSignatureSpan">flickrapi.</span>tokenOnly
+        <span class="apidocSignatureSpan">(options, next)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">tokenOnly = function (options, next) {
+  if(!options) {
+    return next(new Error(&#x22;Please pass an valid Flickr API key and secret to the Flickr module.\n&#x22;+
+                          &#x22;Visit http://www.flickr.com/services/apps/create/apply to get one.&#x22;));
+  }
+
+  if(!options.requestOptions) options.requestOptions = {};
+  var APIBuilder = require(&#x22;./flickr-api-object&#x22;);
+  options.tokenonly = true;
+  new APIBuilder(options, Utils, next);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+```
+var Flickr = require(&#x22;flickrapi&#x22;),
+    flickrOptions = {
+      api_key: &#x22;API key that you get from Flickr&#x22;,
+      secret: &#x22;API key secret that you get from Flickr&#x22;
+    };
+
+Flickr.<span class="apidocCodeKeywordSpan">tokenOnly</span>(flickrOptions, function(error, flickr) {
+  // we can now use &#x22;flickr&#x22; as our API object,
+  // but we can only call public methods and access public data
+});
+```
+
+### Authenticated, full Flickr API access
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.upload" id="apidoc.element.flickrapi.upload">
+        function <span class="apidocSignatureSpan">flickrapi.</span>upload
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">upload = function () { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    },{
+      title: &#x22;test2&#x22;,
+      tags: &#x22;happy fox image \&#x22;test 2\&#x22; separate tags&#x22;,
+      photo: __dirname + &#x22;/test.jpg&#x22;
+    }]
+  };
+
+  Flickr.<span class="apidocCodeKeywordSpan">upload</span>(uploadOptions, FlickrOptions, function(err, result) {
+    if(err) {
+      return console.error(error);
+    }
+    console.log(&#x22;photos uploaded&#x22;, result);
+  });
+});
+```
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.flickrapi.Utils" id="apidoc.module.flickrapi.Utils">module flickrapi.Utils</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.checkRequirements" id="apidoc.element.flickrapi.Utils.checkRequirements">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>checkRequirements
+        <span class="apidocSignatureSpan">(method_name, required, callOptions, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">checkRequirements = function (method_name, required, callOptions, callback) {
+  required = required || [];
+  for(var r=0, last=required.length, arg; r&#x3c;last; r++) {
+    arg = required[r];
+    if(arg.name === &#x22;api_key&#x22;) continue;
+    if(!callOptions.hasOwnProperty(arg.name)) {
+      return callback(new Error(&#x22;missing required argument &#x27;&#x22;+arg.name+&#x22;&#x27; in call to &#x22;+method_name));
+    }
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    var queryArguments = Utils.generateQueryArguments(method.name, this.flickrOptions, callOptions);
+    Utils.queryFlickr(queryArguments, this.flickrOptions, method.security, callback);
+  };
+},
+generateAPIDevFunction: function(method) {
+  return function(callOptions, callback) {
+    if(callOptions &#x26;&#x26; !callback) { callback = callOptions; callOptions = {}; }
+    Utils.<span class="apidocCodeKeywordSpan">checkRequirements</span>(method.name, method.required, callOptions, callback);
+    var queryArguments = Utils.generateQueryArguments(method.name, this.flickrOptions, callOptions);
+    Utils.queryFlickr(queryArguments, this.flickrOptions, method.security, callback, method.errors);
+  };
+},
+generateQueryArguments: function(method_name, flickrOptions, callOptions) {
+  // set up authorized method access
+  var queryArguments = {
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.encodeRFC5987ValueChars" id="apidoc.element.flickrapi.Utils.encodeRFC5987ValueChars">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>encodeRFC5987ValueChars
+        <span class="apidocSignatureSpan">(str)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">encodeRFC5987ValueChars = function (str) {
+  return encodeURIComponent(str).
+  replace(/[&#x27;()!]/g, escape).
+  replace(/\*/g, &#x27;%2A&#x27;).
+  replace(/%(?:7C|60|5E)/g, unescape);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    replace(/\*/g, &#x27;%2A&#x27;).
+    replace(/%(?:7C|60|5E)/g, unescape);
+  },
+  formQueryString: function(queryArguments) {
+    var Utils = this,
+        args = [],
+        append = function(key) {
+          args.push(key + &#x22;=&#x22; + Utils.<span class="apidocCodeKeywordSpan">encodeRFC5987ValueChars</span>(queryArguments
+[key]));
+        };
+    Object.keys(queryArguments).sort().forEach(append);
+    return args.join(&#x22;&#x26;&#x22;);
+  },
+checkRequirements: function(method_name, required, callOptions, callback) {
+  required = required || [];
+  for(var r=0, last=required.length, arg; r&#x3c;last; r++) {
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.formQueryString" id="apidoc.element.flickrapi.Utils.formQueryString">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>formQueryString
+        <span class="apidocSignatureSpan">(queryArguments)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">formQueryString = function (queryArguments) {
+  var Utils = this,
+      args = [],
+      append = function(key) {
+        args.push(key + &#x22;=&#x22; + Utils.encodeRFC5987ValueChars(queryArguments[key]));
+      };
+  Object.keys(queryArguments).sort().forEach(append);
+  return args.join(&#x22;&#x26;&#x22;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+/**
+ * When contacting Flickr &#x22;regularly&#x22;, permission levels greater than 0 (public access)
+ * cannot be securely dealt with. read-only, write, and delete all require oauth
+ * authentication keys, and these should never, ever, be stored at the client.
+ */
+queryFlickrAPI: function(queryArguments, flickrOptions, security, processResult) {
+  var url = &#x22;https://api.flickr.com/services/rest/&#x22;,
+      queryString = this.<span class="apidocCodeKeywordSpan">formQueryString</span>(queryArguments),
+      flickrURL = url + &#x22;?&#x22; + queryString;
+  // Do we need special permissions? (read private, 1, write, 2, or delete, 3)?
+  // if so, those are currently not supported. Send an error-notification.
+  if(security.requiredperms &#x3e; 0) {
+    return processResult(new Error(&#x22;signed calls (write/delete) currently not supported&#x22;));
+  }
+  this.handleURLRequest(&#x22;GET&#x22;, flickrURL, processResult);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.generateAPIDevFunction" id="apidoc.element.flickrapi.Utils.generateAPIDevFunction">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>generateAPIDevFunction
+        <span class="apidocSignatureSpan">(method)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">generateAPIDevFunction = function (method) {
+  return function(callOptions, callback) {
+    if(callOptions &#x26;&#x26; !callback) { callback = callOptions; callOptions = {}; }
+    Utils.checkRequirements(method.name, method.required, callOptions, callback);
+    var queryArguments = Utils.generateQueryArguments(method.name, this.flickrOptions, callOptions);
+    Utils.queryFlickr(queryArguments, this.flickrOptions, method.security, callback, method.errors);
+  };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.generateAPIFunction" id="apidoc.element.flickrapi.Utils.generateAPIFunction">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>generateAPIFunction
+        <span class="apidocSignatureSpan">(method)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">generateAPIFunction = function (method) {
+  return function(callOptions, callback) {
+    if(callOptions &#x26;&#x26; !callback) { callback = callOptions; callOptions = {}; }
+    var queryArguments = Utils.generateQueryArguments(method.name, this.flickrOptions, callOptions);
+    Utils.queryFlickr(queryArguments, this.flickrOptions, method.security, callback);
+  };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+      return +(err.code) &#x3c; errCap;
+    });
+
+// also append the generic error knowledge
+Utils.extendErrors(result.errors.error, errCap);
+
+// build the API function
+var flickrAPIFunction = Utils.<span class="apidocCodeKeywordSpan">generateAPIFunction</span>(method_name, flickrOptions, security
+, required, optional, errors);
+flickrAPIFunction.security = security;
+
+// bind hierarchically
+var curr = API,
+    level;
+while(hierarchy.length &#x3e; 0) {
+  level = hierarchy.splice(0,1)[0];
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.generateQueryArguments" id="apidoc.element.flickrapi.Utils.generateQueryArguments">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>generateQueryArguments
+        <span class="apidocSignatureSpan">(method_name, flickrOptions, callOptions)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">generateQueryArguments = function (method_name, flickrOptions, callOptions) {
+  // set up authorized method access
+  var queryArguments = {
+    method: method_name,
+    format: &#x22;json&#x22;,
+  };
+  if(flickrOptions.api_key) {
+    queryArguments.api_key = flickrOptions.api_key;
+  }
+  // set up bindings for method-specific args
+  Object.keys(callOptions).forEach(function(key) {
+    queryArguments[key] = callOptions[key];
+  });
+  return queryArguments;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+      return callback(new Error(&#x22;missing required argument &#x27;&#x22;+arg.name+&#x22;&#x27; in call to &#x22;+method_name
+));
+    }
+  }
+},
+generateAPIFunction: function(method) {
+  return function(callOptions, callback) {
+    if(callOptions &#x26;&#x26; !callback) { callback = callOptions; callOptions = {}; }
+    var queryArguments = Utils.<span class="apidocCodeKeywordSpan">generateQueryArguments</span>(method.name, this.flickrOptions
+, callOptions);
+    Utils.queryFlickr(queryArguments, this.flickrOptions, method.security, callback);
+  };
+},
+generateAPIDevFunction: function(method) {
+  return function(callOptions, callback) {
+    if(callOptions &#x26;&#x26; !callback) { callback = callOptions; callOptions = {}; }
+    Utils.checkRequirements(method.name, method.required, callOptions, callback);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.handleURLRequest" id="apidoc.element.flickrapi.Utils.handleURLRequest">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>handleURLRequest
+        <span class="apidocSignatureSpan">(verb, url, processResult, postdata)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">handleURLRequest = function (verb, url, processResult, postdata) {
+  var xhr = new XMLHttpRequest();
+  xhr.open(verb, url, true);
+  if(postdata) {
+    xhr.setRequestHeader(&#x22;Content-Type&#x22;, &#x22;application/json&#x22;);
+  }
+  xhr.onreadystatechange = function() {
+    if(xhr.readyState === 4) {
+      if(xhr.status == 200) {
+        var error = false,
+            body = xhr.responseText;
+        // we get a response, but there&#x27;s no response body. That&#x27;s a problem.
+        if(!body) {
+          error = &#x22;HTTP Error &#x22; + response.statusCode + &#x22; (&#x22; + statusCodes[response.statusCode] + &#x22;)&#x22;;
+          return processResult(error);
+        }
+        // we get a response, and there were no errors
+        if(!error) {
+          try {
+            body = body.trim().replace(/^jsonFlickrApi\(/,&#x27;&#x27;).replace(/\}\)$/,&#x27;}&#x27;);
+            body = JSON.parse(body);
+            if(body.stat !== &#x22;ok&#x22;) {
+              // There was a request error, and the JSON .stat property
+              // will tell us what that error was.
+              return processResult(body.message);
+            }
+          } catch (e) {
+            // general JSON error
+            return processResult(&#x22;could not parse body as JSON&#x22;);
+          }
+        }
+        // Some kind of other error occurred. Simply call the process
+        // handler blindly with both the error and error body.
+        processResult(error, body);
+      }
+      else { processResult(&#x22;HTTP status not 200 (received &#x22;+xhr.status+&#x22;)&#x22;); }
+    }
+  };
+  xhr.send(postdata ? JSON.stringify(postdata) : null);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+      queryString = this.formQueryString(queryArguments),
+      flickrURL = url + &#x22;?&#x22; + queryString;
+  // Do we need special permissions? (read private, 1, write, 2, or delete, 3)?
+  // if so, those are currently not supported. Send an error-notification.
+  if(security.requiredperms &#x3e; 0) {
+    return processResult(new Error(&#x22;signed calls (write/delete) currently not supported&#x22;));
+  }
+  this.<span class="apidocCodeKeywordSpan">handleURLRequest</span>(&#x22;GET&#x22;, flickrURL, processResult);
+},
+/**
+ * When we&#x27;re contacting a Flickr API proxy, we can rely on the fact that it will
+ * take care of oauth authentication for us, and so we do not need to do any kind
+ * of security permissions check for the requested methods.
+ */
+queryProxyEndpoint: function(queryArguments, flickrOptions, processResult) {
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.queryFlickr" id="apidoc.element.flickrapi.Utils.queryFlickr">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>queryFlickr
+        <span class="apidocSignatureSpan">(queryArguments, flickrOptions, security, processResult)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">queryFlickr = function (queryArguments, flickrOptions, security, processResult) {
+  if(flickrOptions.endpoint) {
+    return this.queryProxyEndpoint(queryArguments, flickrOptions, processResult);
+  }
+  return this.queryFlickrAPI(queryArguments, flickrOptions, security, processResult);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    }
+  }
+},
+generateAPIFunction: function(method) {
+  return function(callOptions, callback) {
+    if(callOptions &#x26;&#x26; !callback) { callback = callOptions; callOptions = {}; }
+    var queryArguments = Utils.generateQueryArguments(method.name, this.flickrOptions, callOptions);
+    Utils.<span class="apidocCodeKeywordSpan">queryFlickr</span>(queryArguments, this.flickrOptions, method.security, callback);
+  };
+},
+generateAPIDevFunction: function(method) {
+  return function(callOptions, callback) {
+    if(callOptions &#x26;&#x26; !callback) { callback = callOptions; callOptions = {}; }
+    Utils.checkRequirements(method.name, method.required, callOptions, callback);
+    var queryArguments = Utils.generateQueryArguments(method.name, this.flickrOptions, callOptions);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.queryFlickrAPI" id="apidoc.element.flickrapi.Utils.queryFlickrAPI">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>queryFlickrAPI
+        <span class="apidocSignatureSpan">(queryArguments, flickrOptions, security, processResult)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">queryFlickrAPI = function (queryArguments, flickrOptions, security, processResult) {
+  var url = &#x22;https://api.flickr.com/services/rest/&#x22;,
+      queryString = this.formQueryString(queryArguments),
+      flickrURL = url + &#x22;?&#x22; + queryString;
+  // Do we need special permissions? (read private, 1, write, 2, or delete, 3)?
+  // if so, those are currently not supported. Send an error-notification.
+  if(security.requiredperms &#x3e; 0) {
+    return processResult(new Error(&#x22;signed calls (write/delete) currently not supported&#x22;));
+  }
+  this.handleURLRequest(&#x22;GET&#x22;, flickrURL, processResult);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  });
+  return queryArguments;
+},
+queryFlickr: function(queryArguments, flickrOptions, security, processResult) {
+  if(flickrOptions.endpoint) {
+    return this.queryProxyEndpoint(queryArguments, flickrOptions, processResult);
+  }
+  return this.<span class="apidocCodeKeywordSpan">queryFlickrAPI</span>(queryArguments, flickrOptions, security, processResult);
+},
+/**
+ * If you want to upload, you&#x27;re going to have to do it server side.
+ */
+upload: function(uploadOptions, flickrOptions, processResult) {
+  return processResult(new Error(&#x22;Uploading directly from the browser is not supported&#x22;));
+},
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.queryProxyEndpoint" id="apidoc.element.flickrapi.Utils.queryProxyEndpoint">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>queryProxyEndpoint
+        <span class="apidocSignatureSpan">(queryArguments, flickrOptions, processResult)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">queryProxyEndpoint = function (queryArguments, flickrOptions, processResult) {
+  var queryString = this.formQueryString(queryArguments),
+      url = flickrOptions.endpoint + &#x22;?&#x22; + queryString;
+  this.handleURLRequest(&#x22;POST&#x22;, url, processResult, queryArguments);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  Object.keys(callOptions).forEach(function(key) {
+    queryArguments[key] = callOptions[key];
+  });
+  return queryArguments;
+},
+queryFlickr: function(queryArguments, flickrOptions, security, processResult) {
+  if(flickrOptions.endpoint) {
+    return this.<span class="apidocCodeKeywordSpan">queryProxyEndpoint</span>(queryArguments, flickrOptions, processResult);
+  }
+  return this.queryFlickrAPI(queryArguments, flickrOptions, security, processResult);
+},
+/**
+ * If you want to upload, you&#x27;re going to have to do it server side.
+ */
+upload: function(uploadOptions, flickrOptions, processResult) {
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.Utils.upload" id="apidoc.element.flickrapi.Utils.upload">
+        function <span class="apidocSignatureSpan">flickrapi.Utils.</span>upload
+        <span class="apidocSignatureSpan">(uploadOptions, flickrOptions, processResult)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">upload = function (uploadOptions, flickrOptions, processResult) {
+  return processResult(new Error(&#x22;Uploading directly from the browser is not supported&#x22;));
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    },{
+      title: &#x22;test2&#x22;,
+      tags: &#x22;happy fox image \&#x22;test 2\&#x22; separate tags&#x22;,
+      photo: __dirname + &#x22;/test.jpg&#x22;
+    }]
+  };
+
+  Flickr.<span class="apidocCodeKeywordSpan">upload</span>(uploadOptions, FlickrOptions, function(err, result) {
+    if(err) {
+      return console.error(error);
+    }
+    console.log(&#x22;photos uploaded&#x22;, result);
+  });
+});
+```
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
