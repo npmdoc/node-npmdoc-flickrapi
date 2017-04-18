@@ -101,7 +101,62 @@
 
         <li>
 
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">flickrapi.</span>FlickrAPI</span>
+
+        </li>
+
+        <li>
+
             <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">flickrapi.</span>Utils</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.flickrapi.FlickrAPI">module flickrapi.FlickrAPI</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.FlickrAPI.authenticate">
+            function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>authenticate
+            <span class="apidocSignatureSpan">(options, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.FlickrAPI.downsync">
+            function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>downsync
+            <span class="apidocSignatureSpan">(location, removeDeleted)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.FlickrAPI.loadLocally">
+            function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>loadLocally
+            <span class="apidocSignatureSpan">(location, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.FlickrAPI.tokenOnly">
+            function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>tokenOnly
+            <span class="apidocSignatureSpan">(options, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.flickrapi.FlickrAPI.upload">
+            function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>upload
+            <span class="apidocSignatureSpan">()</span>
+            </a>
 
         </li>
 
@@ -496,6 +551,294 @@ Flickr.<span class="apidocCodeKeywordSpan">tokenOnly</span>(flickrOptions, funct
     </ul>
 
 
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.flickrapi.FlickrAPI" id="apidoc.module.flickrapi.FlickrAPI">module flickrapi.FlickrAPI</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.FlickrAPI.authenticate" id="apidoc.element.flickrapi.FlickrAPI.authenticate">
+        function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>authenticate
+        <span class="apidocSignatureSpan">(options, next)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">authenticate = function (options, next) {
+  if(!options) {
+    process.nextTick(function(){
+      next(new Error("Please pass an valid Flickr API key and secret to the Flickr module.\n"+
+                     "Visit http://www.flickr.com/services/apps/create/apply to get one."));
+    });
+    return;
+  }
+
+  // out-of-browser authentication unless specified otherwise
+  if(!options.callback) { options.callback = "oob"; }
+  if(!options.requestOptions) options.requestOptions = {};
+
+  // effect authentication
+  checkToken(options, function(err, access) {
+    var APIBuilder = require("./flickr-api-object");
+    if(!access) {
+      requestToken(options, function(err, body) {
+        if(options.callback !== "oob") {
+          options.processCredentials = options.processCredentials || function(data) {
+            // default function writes creds to .env
+            if(!options.silent) {
+              console.log("Credentials object:");
+              console.log(JSON.stringify(data,null,2));
+            }
+            var envContent = fs.readFileSync(".env") + "\n";
+            Object.keys(data).forEach(function(key) {
+              envContent += "export " + key + "=" + data[key] + "\n";
+            });
+            fs.writeFileSync(".env", envContent);
+          };
+          options.processCredentials(body);
+        }
+
+        // is this auth only, or also API object creation?
+        if(options.noAPI) {
+          process.nextTick(function() { next(false); });
+        }
+        else { new APIBuilder(options, Utils, next); }
+      });
+    } else { new APIBuilder(options, Utils, next); }
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+```
+var Flickr = require("flickrapi"),
+    flickrOptions = {
+      api_key: "API key that you get from Flickr",
+      secret: "API key secret that you get from Flickr"
+    };
+
+Flickr.<span class="apidocCodeKeywordSpan">authenticate</span>(flickrOptions, function(error, flickr) {
+  // we can now use "flickr" as our API object
+});
+```
+
+### As flickrapi internally uses the request module, you can also pass default options for request that are accepted by request.
+defaults() as documented in the [request module](https://github.com/request/request#requestdefaultsoptions)
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.FlickrAPI.downsync" id="apidoc.element.flickrapi.FlickrAPI.downsync">
+        function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>downsync
+        <span class="apidocSignatureSpan">(location, removeDeleted)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">downsync = function (location, removeDeleted) {
+  "use strict";
+
+  location = location || "./data";
+  removeDeleted = removeDeleted || false;
+
+  var fs = require("fs"),
+      aggregatePhotos = require("./photos");
+
+  // directory structure
+  var data = require("../ia")(location);
+
+  // process calls
+  var photos = require("./photos");
+  var sets = require("./sets");
+  var collections = require("./collections");
+
+  // Kick off the down-syncing process
+  return function(err, flickr) {
+    if(err) { return console.log(err); }
+
+    flickr.options.locals = data;
+
+    var completed = function() {
+      console.log("Finished downsyncing.");
+      var handler = flickr.options.afterDownsync;
+      if (handler) { handler(); }
+      else { process.exit(0); }
+    };
+
+    console.log();
+    collections(flickr, function() {
+      sets(flickr, function() {
+        photos(flickr, completed);
+      });
+    });
+  };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+## Download data from Flickr
+
+You can use this module to very easily download all your Flickr content, using the built in `downsync` function:
+
+```
+var Flickr = require("flickrapi"),
+    flickrOptions = { ... };
+Flickr.authenticate(flickrOptions, flickrapi.<span class="apidocCodeKeywordSpan">downsync</span>());
+```
+
+That's all you need to run. The package will generate a data directory with your images in `./data/images` (in several sizes
+), and the information architecture (metadata, sets, collections, etc) in `./data/ia`.
+
+If you want this in a different directory, you can pass the dir as an argument to the downsync function:
+
+```
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.FlickrAPI.loadLocally" id="apidoc.element.flickrapi.FlickrAPI.loadLocally">
+        function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>loadLocally
+        <span class="apidocSignatureSpan">(location, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">loadLocally = function (location, options) {
+  options = options || {};
+  var dirstructure = ensureDirectories(location);
+
+  // photos are ranked by publication date
+  var photos = readAll(dirstructure.ia.photos.root, "id", function(a,b,items) {
+    return items[b].dates.posted - items[a].dates.posted;
+  });
+
+  // sets are ranked by creation date
+  var photosets = readAll(dirstructure.ia.photosets, "id", function(a,b,items) {
+    return items[b].date_create - items[a].date_create;
+  });
+
+  // collections are sorted alphabetically
+  var collections = readAll(dirstructure.ia.collections, "id", function(a,b,items) {
+    a = items[a].title;
+    b = items[b].title;
+    return a === b ? 0 : b &lt; a ? -1 : -1;
+  });
+
+  // filter out the private photos from the key index
+  if(!options.loadPrivate) {
+    photos.keys = photos.keys.filter(function(key) {
+      return photos.data[key].visibility.ispublic === 1;
+    });
+    photosets.keys = photosets.keys.filter(function(key) {
+      return photosets.data[key].visibility_can_see_set === 1;
+    });
+  }
+
+  // perform cross-referencing
+  crossReference(dirstructure, photos, photosets, collections);
+
+  // our final IA object
+  return {
+    // photos
+    photos: photos.data,
+    photo_keys: photos.keys,
+    // sets
+    photosets: photosets.data,
+    photoset_keys: photosets.keys,
+    // collections
+    collections: collections.data,
+    collection_keys: collections.keys,
+    // dir adminstration
+    dirstructure: dirstructure
+  };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+## Use your Flickr data in another application
+
+If you downloaded all your Flickr data, you can use these in your own node apps by "dry loading" Flickr:
+
+```
+var Flickr = require("flickrapi"),
+  flickrData = Flickr.<span class="apidocCodeKeywordSpan">loadLocally</span>();
+```
+
+This will give you an object with the following structure:
+
+```
+{
+photos: [photo objects],
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.FlickrAPI.tokenOnly" id="apidoc.element.flickrapi.FlickrAPI.tokenOnly">
+        function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>tokenOnly
+        <span class="apidocSignatureSpan">(options, next)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">tokenOnly = function (options, next) {
+  if(!options) {
+    return next(new Error("Please pass an valid Flickr API key and secret to the Flickr module.\n"+
+                          "Visit http://www.flickr.com/services/apps/create/apply to get one."));
+  }
+
+  if(!options.requestOptions) options.requestOptions = {};
+  var APIBuilder = require("./flickr-api-object");
+  options.tokenonly = true;
+  new APIBuilder(options, Utils, next);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+```
+var Flickr = require("flickrapi"),
+    flickrOptions = {
+      api_key: "API key that you get from Flickr",
+      secret: "API key secret that you get from Flickr"
+    };
+
+Flickr.<span class="apidocCodeKeywordSpan">tokenOnly</span>(flickrOptions, function(error, flickr) {
+  // we can now use "flickr" as our API object,
+  // but we can only call public methods and access public data
+});
+```
+
+### Authenticated, full Flickr API access
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.flickrapi.FlickrAPI.upload" id="apidoc.element.flickrapi.FlickrAPI.upload">
+        function <span class="apidocSignatureSpan">flickrapi.FlickrAPI.</span>upload
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">upload = function () { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    },{
+      title: "test2",
+      tags: "happy fox image \"test 2\" separate tags",
+      photo: __dirname + "/test.jpg"
+    }]
+  };
+
+  Flickr.<span class="apidocCodeKeywordSpan">upload</span>(uploadOptions, FlickrOptions, function(err, result) {
+    if(err) {
+      return console.error(error);
+    }
+    console.log("photos uploaded", result);
+  });
+});
+```
+...</pre></li>
+    </ul>
 
 
 </div>
