@@ -1,6 +1,6 @@
 # npmdoc-flickrapi
 
-#### api documentation for  [flickrapi (v0.6.0)](https://github.com/Pomax/node-flickrapi#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-flickrapi.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-flickrapi) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-flickrapi.svg)](https://travis-ci.org/npmdoc/node-npmdoc-flickrapi)
+#### basic api documentation for  [flickrapi (v0.6.0)](https://github.com/Pomax/node-flickrapi#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-flickrapi.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-flickrapi) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-flickrapi.svg)](https://travis-ci.org/npmdoc/node-npmdoc-flickrapi)
 
 #### A Node.js, and client-side, implementation of the Flickr API (for use with an API key, server-side oauth enabled)
 
@@ -76,7 +76,8 @@
     "scripts": {
         "test": "node test"
     },
-    "version": "0.6.0"
+    "version": "0.6.0",
+    "bin": {}
 }
 ```
 
